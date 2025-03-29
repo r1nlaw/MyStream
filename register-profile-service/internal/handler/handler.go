@@ -2,8 +2,6 @@ package handler
 
 import (
 	"register-profile-service/internal/service"
-
-	"github.com/rs/cors"
 )
 
 type Handler struct {
@@ -16,11 +14,14 @@ func NewHandler(service *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() {
 
-	corsPolice := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8081"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
-		AllowedHeaders:   []string{"Content-Type"},
-		AllowCredentials: true,
-	})
+	/*
+		corsPolice := cors.New(cors.Options{
+			AllowedOrigins:   []string{"http://localhost:8081"},
+			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+			AllowedHeaders:   []string{"Content-Type"},
+			AllowCredentials: true,
+		})
+
+	*/
 
 }

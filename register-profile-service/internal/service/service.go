@@ -1,12 +1,19 @@
 package service
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+	"register-profile-service/internal/repository"
+)
 
-type User interface {
+type Service struct {
+}
+
+type UserService interface {
 	SingUp(w http.ResponseWriter, r *http.Request)
 	SingIn(w http.ResponseWriter, r *http.Request)
 }
 
-type Service struct {
-	User
+func NewService(ctx context.Context, repository *repository.Repository) *Service {
+
 }
