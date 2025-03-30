@@ -17,8 +17,8 @@ func NewUserPostgres(ctx context.Context, db *sqlx.DB) *UserDB {
 	return &UserDB{ctx: ctx, postgres: db}
 }
 
-func (u *UserDB) GetUser(userID int64) (interface{}, error) {
-	query := `SELECT * FROM users WHERE id=$1`
+func (u *UserDB) GetUser(ctx context.Context, email string) (interface{}, error) {
+	query := `SELECT * FROM users WHERE email=$1`
 	var result interface{}
 	err := u.postgres.Select(&result, query)
 	if err != nil {
@@ -27,12 +27,12 @@ func (u *UserDB) GetUser(userID int64) (interface{}, error) {
 	return result, nil
 }
 
-func (u *UserDB) AddUser(userData models.User) (string, error) {
+func (u *UserDB) AddUser(ctx context.Context, userData models.User) error {
 	quary := `INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)`
 	var newID int
 	err := u.postgres.QueryRow(quary, userData.Username, userData.Email, userData.PasswordHash).Scan(&newID)
 	if err != nil {
-		return "", fmt.Errorf("failed to add user %w", err)
+		return fmt.Errorf("failed to add user %w", err)
 	}
-	return "user add successfully", nil
+	return fmt.Errorf("user add successfully")
 }

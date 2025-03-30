@@ -8,8 +8,8 @@ import (
 )
 
 type User interface {
-	GetUser(UserID int64) (interface{}, error)
-	AddUser(userData models.User) (string, error)
+	GetUser(ctx context.Context, email string) (interface{}, error)
+	AddUser(ctx context.Context, userData models.User) error
 }
 
 type Repository struct {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"register-profile-service/internal/repository"
+	"register-profile-service/internal/service"
 	"register-profile-service/pkg/logging"
 
 	"github.com/joho/godotenv"
@@ -32,7 +33,7 @@ func main() {
 	ctx := context.Background()
 	repository := repository.NewRepository(ctx, db)
 	logging.Logger.Info("initializing repository")
-	services := service.NewService(repository, ctx)
-	logging.Logger.Info("Инициалиазация сервисов")
+	services := service.NewService(ctx, repository, tokenMaker, hashUtil)
+	logging.Logger.Info("initializing services")
 
 }
