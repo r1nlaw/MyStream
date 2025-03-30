@@ -15,28 +15,37 @@ type LogService struct {
 
 var Logger *LogService
 
-func NewLogService(output io.Writer, lvl string) {
+func NewLogService(output io.Writer, lvl string) error {
+	if output == nil {
+		return fmt.Errorf("output writer cannot be nil")
+	}
+
 	level, err := logrus.ParseLevel(lvl)
 	if err != nil {
 		level = logrus.InfoLevel
-		err = nil
 	}
+
 	logger := logrus.New()
 	logger.SetOutput(output)
 	logger.SetLevel(level)
+
 	Logger = &LogService{
 		output: output,
 		logger: logger,
 	}
+	return nil
 }
 
-// Print логирует сообщение с ID и контекстом
 func (l *LogService) Info(msg string) {
-	l.logger.WithFields(logrus.Fields{}).Info(msg)
-
+	if l != nil && l.logger != nil {
+		l.logger.Info(msg)
+	}
 }
+
 func (l *LogService) Warn(msg string) {
-	l.logger.WithFields(logrus.Fields{}).Warn(msg)
+	if l != nil && l.logger != nil {
+		l.logger.Warn(msg)
+	}
 }
 
 func (l *LogService) SetFormat(writer io.Writer) {

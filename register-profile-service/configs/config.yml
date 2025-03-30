@@ -1,7 +1,9 @@
-port: "8080"
+server:
+  port: "8080"
 
 db:
   port: "5432"
   username: "myStream-register-profile"
   dbname: "MS-register-profile"
   sslmode: "disable"
+

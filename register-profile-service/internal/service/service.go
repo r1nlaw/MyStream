@@ -32,6 +32,10 @@ func NewService(ctx context.Context, repository *repository.Repository, tokenMak
 }
 
 func (s *Service) SignUp(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	var request models.SignUpRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		http.Error(w, "failed to parse request", http.StatusBadRequest)
@@ -59,6 +63,10 @@ func (s *Service) SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Service) SignIn(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	var request models.SignInRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		http.Error(w, "failed to parse request", http.StatusBadRequest)
