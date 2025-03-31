@@ -75,21 +75,16 @@ func (s *Service) SignIn(w http.ResponseWriter, r *http.Request) {
 
 	userData, err := s.repository.GetUser(s.ctx, request.Email)
 	if err != nil {
-		http.Error(w, "invalid email or password", http.StatusUnauthorized)
-		return
-	}
-	user, ok := userData.(models.User)
-	if !ok {
-		http.Error(w, "user data is not in the expected format", http.StatusInternalServerError)
+		http.Error(w, "invalid email or passwordq", http.StatusUnauthorized)
 		return
 	}
 
-	if !s.hashUtil.CheckPassword(user.PasswordHash, request.PasswordHash) {
+	if !s.hashUtil.CheckPassword(userData.PasswordHash, request.PasswordHash) {
 		http.Error(w, "invalid email or password", http.StatusUnauthorized)
 		return
 	}
 
-	token, err := s.tokenMaker.CreateToken(user.ID)
+	token, err := s.tokenMaker.CreateToken(userData.ID)
 	if err != nil {
 		http.Error(w, "failed to create token", http.StatusInternalServerError)
 		return

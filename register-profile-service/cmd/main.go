@@ -20,14 +20,14 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile("../configs/config.yml")
+	viper.SetConfigFile("./configs/config.yml")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config: %v", err)
 	}
 }
 func main() {
 	if err := godotenv.Load(); err != nil {
-		logging.Logger.Warn(logging.MakeLog("failed to initialization DB ", err))
+		logging.Logger.Warn(logging.MakeLog("failed to load env file", err))
 		return
 	}
 	if err := logging.NewLogService(os.Stdout, os.Getenv("LOG_MODE")); err != nil {
@@ -44,6 +44,7 @@ func main() {
 	})
 	if err != nil {
 		logging.Logger.Warn(logging.MakeLog("failed to initialization DB ", err))
+		return
 	}
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {

@@ -24,7 +24,7 @@ type Config struct {
 
 func InitDB(cfg Config) (*sqlx.DB, error) {
 
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load("./.env"); err != nil {
 		log.Fatal("error to read env file")
 	}
 
@@ -57,7 +57,7 @@ func InitDB(cfg Config) (*sqlx.DB, error) {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://../schema",
+		"file://./schema",
 		conf.DBName, driver,
 	)
 	if err != nil {

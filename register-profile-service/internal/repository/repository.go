@@ -8,7 +8,7 @@ import (
 )
 
 type User interface {
-	GetUser(ctx context.Context, email string) (interface{}, error)
+	GetUser(ctx context.Context, email string) (*models.User, error)
 	AddUser(ctx context.Context, userData models.User) error
 }
 
