@@ -17,8 +17,7 @@ func NewHandler(service *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() http.Handler {
 	router := http.NewServeMux()
-
-	// Настройка CORS
+	
 	corsPolicy := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:8081"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},

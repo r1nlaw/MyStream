@@ -1,0 +1,3 @@
+ALTER TABLE profiles
+ADD COLUMN username VARCHAR(20) NOT NULL,
+ADD CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE;
