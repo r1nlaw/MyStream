@@ -10,6 +10,7 @@ import (
 type User interface {
 	GetUser(ctx context.Context, email string) (*models.User, error)
 	AddUser(ctx context.Context, userData models.User) error
+	AddSession(ctx context.Context, jwt models.JWTRequest) error
 }
 
 type Repository struct {

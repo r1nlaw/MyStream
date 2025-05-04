@@ -8,6 +8,7 @@ import (
 	"register-profile-service/internal/repository"
 	"register-profile-service/internal/service/hash"
 	"register-profile-service/internal/service/token"
+	"time"
 )
 
 type Service struct {
@@ -84,10 +85,20 @@ func (s *Service) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := s.tokenMaker.CreateToken(userData.ID)
+	token, expiresAt, err := s.tokenMaker.CreateToken(userData.ID)
 	if err != nil {
 		http.Error(w, "failed to create token", http.StatusInternalServerError)
 		return
+	}
+	sessionData := models.JWTRequest{
+		UserID:    userData.ID,
+		Token:     token,
+		CreatedAt: time.Now(),
+		ExpiresAt: expiresAt,
+	}
+	err = s.repository.AddSession(s.ctx, sessionData)
+	if err != nil {
+		http.Error(w, "failed to create session", http.StatusInternalServerError)
 	}
 
 	w.WriteHeader(http.StatusOK)

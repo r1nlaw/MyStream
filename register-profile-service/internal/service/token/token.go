@@ -8,7 +8,7 @@ import (
 )
 
 type Maker interface {
-	CreateToken(userID int64) (string, error)
+	CreateToken(userID int64) (string, time.Time, error)
 	VerifyToken(token string) (*Payload, error)
 }
 
@@ -29,15 +29,22 @@ func NewJWTMaker(secretKey string) (*JWTMaker, error) {
 	return &JWTMaker{secretKey: secretKey}, nil
 }
 
-func (j *JWTMaker) CreateToken(userID int64) (string, error) {
+func (j *JWTMaker) CreateToken(userID int64) (string, time.Time, error) {
+
+	exipresAt := time.Now().Add(time.Hour * 24)
 	payload := jwt.MapClaims{
 		"user_id":    userID,
-		"expired_at": time.Now().Add(time.Hour * 24).Unix(),
+		"expires_at": exipresAt.Unix(),
 		"created_at": time.Now().Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
-	return token.SignedString([]byte(j.secretKey))
+	signedToken, err := token.SignedString([]byte(j.secretKey))
+	if err != nil {
+		return "", time.Time{}, err
+	}
+
+	return signedToken, exipresAt, nil
 }
 
 func (j *JWTMaker) VerifyToken(tokenStr string) (*Payload, error) {

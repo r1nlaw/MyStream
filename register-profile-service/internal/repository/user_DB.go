@@ -81,3 +81,13 @@ func (u *UserDB) AddProfile(ctx context.Context, profile models.Profile) error {
 	}
 	return nil
 }
+
+func (u *UserDB) AddSession(ctx context.Context, jwt models.JWTRequest) error {
+	query := `INSERT INTO sessions (user_id, token, created_at, expires_at) VALUES ($1, $2, $3, $4)`
+
+	_, err := u.postgres.ExecContext(ctx, query, jwt.UserID, jwt.Token, jwt.CreatedAt, jwt.ExpiresAt)
+	if err != nil {
+		return fmt.Errorf("failed to add session: %w", err)
+	}
+	return nil
+}
